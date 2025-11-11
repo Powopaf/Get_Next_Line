@@ -6,7 +6,7 @@
 /*   By: pifourni <pifourni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 16:03:37 by pifourni          #+#    #+#             */
-/*   Updated: 2025/11/10 23:32:12 by pifourni         ###   ########.fr       */
+/*   Updated: 2025/11/11 10:28:56 by pifourni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define GET_NEXT_LINE_H
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42   // default value if no -D given
+#  define BUFFER_SIZE 42
 # endif
 
 # include <unistd.h>

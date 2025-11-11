@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/* ************************************************************************** */	
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
@@ -6,32 +6,58 @@
 /*   By: pifourni <pifourni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 16:03:13 by pifourni          #+#    #+#             */
-/*   Updated: 2025/11/10 23:48:21 by pifourni         ###   ########.fr       */
+/*   Updated: 2025/11/11 11:10:43 by pifourni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-/*
- *
- * read the file until by chunk of BUFFER SIZE put all of it in the static
- * buffer. when \n or \0 found in the static create a newline that end with \n
- * and return it
- * remove the line of the static buffer if last char of the next line is \0 ->
- * we have reach the end of file static buffer must be free and = NULL
- *
- * TODO: ft_strjoin -> libft
- * TODO: find_nl -> look for newline 
-*/
-
-char *get_rest(char *buff)
+char *get_rest(char *buffer)
 {
-	//TODO: erase the last line from the buffer because it has already been read
+	size_t	i;
+	size_t	j;
+	char	*rest;
+
+	i = 0;
+	while (buffer[i] != '\0' && buffer[i] != '\n')
+		i++;
+	if (buffer[i] == '\0')
+	{
+		free(buffer);
+		return (NULL);
+	}
+	j = 0;
+	while (buffer[i + j] != '\0')
+		j++;
+	rest = ft_calloc(i - j + 1, sizeof(char));
+	j = 0;
+	while (buffer[i + j] != '\0')
+	{
+		rest[j] = buffer[i + j];
+		j++;
+	}
+	free(buffer);
+	return (rest);
 }
 
 char	*get_line(char	*buffer)
 {
-	//TODO: return a line that must end with \n
+	size_t	i;
+	char	*line;
+
+	i = 0;
+	while (buffer[i] != '\0' && buffer[i] != '\n')
+		i++;
+	line = ft_calloc(i + 2, sizeof(char));
+	i = 0;
+	while (buffer[i] != '\0' && buffer[i] != '\n')
+	{
+		line[i] = buffer[i];
+		i++;
+	}
+	line[i] = '\n';
+	line[i + 1] = '\0';
+	return (line);
 }
 
 char	*get_chunk(char *buffer, int fd)
