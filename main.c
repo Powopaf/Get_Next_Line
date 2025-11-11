@@ -9,7 +9,9 @@ int main()
 	while (a != NULL)
 	{
 		printf("%s", a);
+		free(a);
 		a = get_next_line(fd);
 	}
+	free(a);
 	return (1);
 }
