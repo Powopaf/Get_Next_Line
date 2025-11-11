@@ -6,7 +6,7 @@
 /*   By: pifourni <pifourni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 16:03:13 by pifourni          #+#    #+#             */
-/*   Updated: 2025/11/11 11:10:43 by pifourni         ###   ########.fr       */
+/*   Updated: 2025/11/11 12:00:38 by pifourni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,9 @@ char *get_rest(char *buffer)
 	j = 0;
 	while (buffer[i + j] != '\0')
 		j++;
-	rest = ft_calloc(i - j + 1, sizeof(char));
+	rest = ft_calloc(j, sizeof(char));
 	j = 0;
+	i++;
 	while (buffer[i + j] != '\0')
 	{
 		rest[j] = buffer[i + j];
@@ -60,20 +61,41 @@ char	*get_line(char	*buffer)
 	return (line);
 }
 
+char	*join_free(char *buffer, char *chunk)
+{
+	char	*temp;
+
+	temp = ft_strjoin(buffer, chunk);
+	free(buffer);
+	return (temp);
+}
+
 char	*get_chunk(char *buffer, int fd)
 {
 	char	*chunk;
+	int		data_read;
 
 	if (!buffer)
-		ft_calloc(1, sizeof(char));
+		buffer = ft_calloc(1, sizeof(char));
 	chunk = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 	if (!chunk)
 		return (NULL);
-	while (read(fd, chunk, BUFFER_SIZE) > 0)
+	while (1)
 	{
-		buffer = ft_strjoin(buffer, chunk);
-		if (!buffer)
+		data_read = read(fd, chunk, BUFFER_SIZE);
+		if (data_read < 0)
+		{
+			free(chunk);
 			return (NULL);
+		}
+		if (data_read == 0)
+			break ;
+		buffer = join_free(buffer, chunk);
+		if (!buffer)
+		{
+			free(chunk);
+			return (NULL);
+		}
 		if (has_nl(buffer))
 			break ;
 	}
@@ -85,10 +107,13 @@ char	*get_next_line(int fd)
 {
 	static char	*buffer;
 	char		*line;
-	
+
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+		return (NULL);
 	buffer = get_chunk(buffer, fd);
-	if (!buffer)
+	if (!buffer || *buffer == '\0')
 	{
+		free(buffer);
 		return (NULL);
 	}
 	line = get_line(buffer);
