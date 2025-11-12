@@ -6,7 +6,7 @@
 /*   By: pifourni <pifourni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 22:52:03 by pifourni          #+#    #+#             */
-/*   Updated: 2025/11/10 23:45:39 by pifourni         ###   ########.fr       */
+/*   Updated: 2025/11/12 18:20:24 by pifourni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,13 @@ void	*ft_calloc(size_t nmemb, size_t size)
 		i++;
 	}
 	return (res);
+}
+
+void	*free_stuff(char *chunk, char *buffer)
+{
+	if (chunk)
+		free(chunk);
+	if (buffer)
+		free(buffer);
+	return (NULL);
 }

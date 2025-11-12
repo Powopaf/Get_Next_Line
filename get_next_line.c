@@ -1,4 +1,4 @@
-/* ************************************************************************** */	
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
@@ -6,13 +6,13 @@
 /*   By: pifourni <pifourni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 16:03:13 by pifourni          #+#    #+#             */
-/*   Updated: 2025/11/11 14:50:46 by pifourni         ###   ########.fr       */
+/*   Updated: 2025/11/12 18:37:18 by pifourni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char *get_rest(char *buffer)
+char	*get_rest(char *buffer)
 {
 	size_t	i;
 	size_t	j;
@@ -77,36 +77,20 @@ char	*get_chunk(char *buffer, int fd)
 	int		data_read;
 
 	if (!buffer)
-	{
 		buffer = ft_calloc(1, sizeof(char));
-		if (!buffer)
-			return (NULL);
-	}
 	chunk = malloc(BUFFER_SIZE + 1);
-	if (!chunk)
-	{
-		free(buffer);
-		return (NULL);
-	}
+	if (!chunk || !buffer)
+		return (free_stuff(chunk, buffer));
 	while (1)
 	{
 		data_read = read(fd, chunk, BUFFER_SIZE);
 		if (data_read < 0)
-		{
-			free(chunk);
-			free(buffer);
-			return (NULL);
-		}
+			return (free_stuff(chunk, buffer));
 		chunk[data_read] = '\0';
 		if (data_read == 0)
 			break ;
 		buffer = join_free(buffer, chunk);
-		if (!buffer)
-		{
-			free(chunk);
-			return (NULL);
-		}
-		if (has_nl(chunk))
+		if (!buffer || has_nl(chunk))
 			break ;
 	}
 	free(chunk);
@@ -130,5 +114,4 @@ char	*get_next_line(int fd)
 	line = get_line(buffer);
 	buffer = get_rest(buffer);
 	return (line);
-	
 }
