@@ -26,17 +26,23 @@ char	*get_rest(char *buffer)
 		free(buffer);
 		return (NULL);
 	}
+	i++;
 	j = 0;
 	while (buffer[i + j] != '\0')
 		j++;
-	rest = ft_calloc(j, sizeof(char));
+	if (j == 0)
+	{
+		free(buffer);
+		return (NULL);
+	}
+	rest = ft_calloc(j + 1, sizeof(char));
 	j = 0;
-	i++;
 	while (buffer[i + j] != '\0')
 	{
 		rest[j] = buffer[i + j];
 		j++;
 	}
+	rest[j] = '\0';
 	free(buffer);
 	return (rest);
 }
